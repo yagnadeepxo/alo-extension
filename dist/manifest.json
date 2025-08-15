@@ -1,0 +1,52 @@
+{
+    "manifest_version": 3,
+    "name": "ALO Extension",
+    "description": "AI usage reputation tracker",
+    "version": "1.0",
+    "icons": {
+    "16": "icons/icon.png"
+  },
+    "action": {
+      "default_popup": "index.html"
+    },
+    "background": {
+      "service_worker": "background.js",
+      "type": "module"
+    },
+    "content_scripts": [
+      {
+        "matches": ["http://localhost:3000/*"],
+        "js": ["content.js"]
+      },
+      {
+        "matches": ["https://chatgpt.com/*"],
+        "js": ["chatgpt.js", "timer.js", "content.js"]
+      },
+      {
+        "matches": ["https://claude.ai/*"],
+        "js": ["claude.js","timer.js", "content.js"]
+      },
+      {
+        "matches": ["https://chat.deepseek.com/*"],
+        "js": ["timer.js", "content.js"]
+      },
+      {
+        "matches": ["https://www.perplexity.ai/*"],
+        "js": ["perplexity.js","timer.js", "content.js"]
+      },
+      {
+        "matches": ["https://grok.com/*", "https://x.ai/*"],
+        "js": ["timer.js", "content.js"]
+      }
+    ],
+    "permissions": ["storage", "scripting", "tabs"],
+    "host_permissions": [
+      "http://localhost:3000/*",
+      "https://chatgpt.com/*",
+      "https://claude.ai/*",
+      "https://chat.deepseek.com/*",
+      "https://www.perplexity.ai/*",
+      "https://grok.com/*",
+      "https://x.ai/*"
+    ]
+  }
