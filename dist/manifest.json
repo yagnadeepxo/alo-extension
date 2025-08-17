@@ -41,7 +41,7 @@
     ],
     "permissions": ["storage", "scripting", "tabs"],
     "host_permissions": [
-      "http://localhost:3000/*",
+      "https://aloweb.vercel.app/*",
       "https://chatgpt.com/*",
       "https://claude.ai/*",
       "https://chat.deepseek.com/*",
