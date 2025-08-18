@@ -48,6 +48,9 @@ async function initializeDailyTracking() {
               console.error('❌ Error resetting daily counters:', chrome.runtime.lastError);
             } else {
               console.log('✅ Daily counters reset successfully for new date:', currentDate);
+              
+              // CRITICAL FIX: Notify the time tracker to reset its internal state
+              notifyTimeTrackerReset();
             }
           });
         } else {
@@ -72,6 +75,32 @@ async function initializeDailyTracking() {
       });
     }
   });
+}
+
+// Function to notify time tracker about reset
+function notifyTimeTrackerReset() {
+  console.log('🔄 Notifying time tracker to reset...');
+  
+  // Method 1: Try using the global API if available
+  if (window.llmTimeTracker && typeof window.llmTimeTracker.reset === 'function') {
+    console.log('📡 Using global API to reset time tracker');
+    window.llmTimeTracker.reset();
+  }
+  
+  // Method 2: Dispatch a custom event as backup
+  const resetEvent = new CustomEvent('llm-tracker-reset', {
+    detail: { timestamp: Date.now(), reason: 'daily-reset' }
+  });
+  window.dispatchEvent(resetEvent);
+  console.log('📡 Dispatched llm-tracker-reset event');
+  
+  // Method 3: Post message as additional backup
+  window.postMessage({
+    type: 'LLM_TRACKER_RESET',
+    timestamp: Date.now(),
+    reason: 'daily-reset'
+  }, '*');
+  console.log('📡 Posted reset message');
 }
 
 // Initialize when script loads
